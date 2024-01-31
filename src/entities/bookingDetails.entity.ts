@@ -1,29 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-
 @Schema()
 export class BookingDetailSchema extends Document {
-    @Prop({ required: true, unique: true, message: 'ID must be unique' })
-    id: number;
+  @Prop({ required: true, unique: true, message: 'ID must be unique' })
+  id: number;
 
-    @Prop({ required: true })
-    userID: number;
+  @Prop({ required: true })
+  userID: number;
 
-    @Prop({ required: true })
-    employeeID: number[];
-    
-    @Prop({ required: true })
-    dateBooking: Date;
+  @Prop({ required: true })
+  employeeID: number[];
 
-    @Prop({ required: true })
-    comment: string;
+  @Prop({ required: true })
+  dateBooking: Date;
 
-    @Prop({ required: true })
-    code: string;
+  @Prop({ required: true })
+  comment: string;
 
-   
-
+  @Prop({ required: true })
+  code: string;
 }
 
-export const BookingDetailSchemaSchema = SchemaFactory.createForClass(BookingDetailSchema);
+export const BookingDetailSchemaSchema =
+  SchemaFactory.createForClass(BookingDetailSchema);
