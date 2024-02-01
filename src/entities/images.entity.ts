@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
-export class Category extends Document {
+export class Images extends Document {
   @Prop({ required: true, unique: true, message: 'ID must be unique' })
   id: number;
 
@@ -10,4 +10,4 @@ export class Category extends Document {
   images: string[];
 }
 
-export const CategorySchema = SchemaFactory.createForClass(Category);
+export const ImagesSchema = SchemaFactory.createForClass(Images);

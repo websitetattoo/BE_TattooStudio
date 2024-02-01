@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
-export class DiscountSchema extends Document {
+export class Discount extends Document {
   @Prop({ required: true, unique: true, message: 'ID must be unique' })
   id: number;
 
@@ -22,5 +22,5 @@ export class DiscountSchema extends Document {
   type: number;
 }
 
-export const DiscountSchemaSchema =
-  SchemaFactory.createForClass(DiscountSchema);
+export const DiscountSchema =
+  SchemaFactory.createForClass(Discount);
