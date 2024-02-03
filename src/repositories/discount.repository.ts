@@ -1,14 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { Discount } from "src/entities/discount.entity";
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Discount } from 'src/entities/discount.entity';
 
-
-@Injectable() 
-
+@Injectable()
 export class DiscountRepository {
-    constructor(
-        @InjectModel(Discount.name) private DiscountModel: Model<Discount>) {}
-        
-        
+  constructor(
+    @InjectModel(Discount.name) private DiscountModel: Model<Discount>,
+  ) {}
 }

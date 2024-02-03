@@ -1,12 +1,22 @@
+//Libary
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as multer from 'multer';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+  });
 
+  // Configure multer middleware for handling form-data
+  const storage = multer.memoryStorage();
+  const multerMiddleware = multer({ storage });
+  app.use(multerMiddleware.any());
 
-  console.log("app listen on port 3000");
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(3000);
 }
+
 bootstrap();

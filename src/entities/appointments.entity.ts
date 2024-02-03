@@ -22,5 +22,4 @@ export class Appointments extends Document {
   code: string;
 }
 
-export const AppointmentsSchema =
-  SchemaFactory.createForClass(Appointments);
+export const AppointmentsSchema = SchemaFactory.createForClass(Appointments);

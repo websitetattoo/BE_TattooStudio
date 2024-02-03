@@ -3,9 +3,6 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class User extends Document {
-  @Prop({ required: true, unique: true, message: 'ID must be unique' })
-  id: number;
-
   @Prop({ required: true })
   firstName: string;
 
@@ -16,7 +13,7 @@ export class User extends Document {
   city: string;
 
   @Prop({ required: true })
-  age: boolean;
+  age: number;
 
   @Prop({ required: true })
   email: string;
@@ -24,20 +21,20 @@ export class User extends Document {
   @Prop({ required: true })
   phone: string;
 
-  @Prop({ required: true })
+  @Prop()
   description: string;
 
-  @Prop({ required: true })
+  @Prop()
   rfImage: string;
 
-  @Prop({ required: true })
+  @Prop()
   addImage: string;
-
-  @Prop({ required: true })
-  location: string;
 
   @Prop()
   lcImage: string;
+
+  @Prop()
+  location: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

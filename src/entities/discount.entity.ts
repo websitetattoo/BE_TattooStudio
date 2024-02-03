@@ -22,5 +22,4 @@ export class Discount extends Document {
   type: number;
 }
 
-export const DiscountSchema =
-  SchemaFactory.createForClass(Discount);
+export const DiscountSchema = SchemaFactory.createForClass(Discount);
