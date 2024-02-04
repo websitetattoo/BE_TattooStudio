@@ -3,9 +3,6 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class Category extends Document {
-  @Prop({ required: true, unique: true, message: 'ID must be unique' })
-  id: number;
-
   @Prop({ required: true })
   name: string;
 

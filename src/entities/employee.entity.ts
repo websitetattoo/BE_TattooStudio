@@ -3,28 +3,25 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class Employee extends Document {
-  @Prop({ required: true, unique: true, message: 'ID must be unique' })
-  id: number;
-
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
+  @Prop()
   description: string;
 
   @Prop({ required: true })
   avatar: string;
 
-  @Prop({ required: true })
+  @Prop()
   images: string[];
 
-  @Prop({ required: true })
+  @Prop()
   link: string;
 
-  @Prop({ required: true })
+  @Prop()
   style: string;
 
-  @Prop({ required: true })
+  @Prop()
   content: string;
 }
 
