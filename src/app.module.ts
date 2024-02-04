@@ -3,7 +3,7 @@ import CategoryModule from './modules/category/category.module';
 import AppointmentsModule from './modules/appointments/appointments.module';
 import UserModule from './modules/user/user.module';
 import ImagesModule from './modules/images/images.module';
-import EmployeeModule from './modules/employyee/employee.module';
+import EmployeeModule from './modules/employee/employee.module';
 import DiscountModule from './modules/discount/discount.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
