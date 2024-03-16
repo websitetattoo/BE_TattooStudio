@@ -5,7 +5,7 @@ import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 //Repositories
 import { UserRepository } from 'src/repositories/User.repository';
 //Entities
-import { User } from 'src/entities/User.entity';
+import { User } from 'src/entities/user.entity';
 
 @Injectable()
 export class UserService {
