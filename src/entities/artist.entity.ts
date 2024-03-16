@@ -2,9 +2,12 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
-export class Employee extends Document {
+export class Artist extends Document {
   @Prop({ required: true })
   name: string;
+
+  @Prop()
+  header: string;
 
   @Prop()
   description: string;
@@ -17,12 +20,6 @@ export class Employee extends Document {
 
   @Prop()
   link: string;
-
-  @Prop()
-  style: string;
-
-  @Prop()
-  content: string;
 }
 
-export const EmployeeSchema = SchemaFactory.createForClass(Employee);
+export const ArtistSchema = SchemaFactory.createForClass(Artist);

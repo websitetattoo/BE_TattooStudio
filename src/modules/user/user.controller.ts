@@ -9,7 +9,7 @@ import {
 //./
 import { UserService } from './user.service';
 //Entities
-import { User } from 'src/entities/User.entity';
+import { User } from 'src/entities/user.entity';
 
 @Controller('users')
 export class UserController {
