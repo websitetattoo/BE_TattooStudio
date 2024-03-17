@@ -6,6 +6,7 @@ import UserModule from './modules/user/user.module';
 import ImagesModule from './modules/images/images.module';
 import DiscountModule from './modules/discount/discount.module';
 import PoliciesModule from './modules/policies/policies.module';
+import NewsModule from './modules/news/news.module';
 import { ConfigModule } from './config/config.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import TattoocareModule from './modules/tattoo-care/tattoo-care.module';
@@ -33,6 +34,7 @@ import ArtistModule from './modules/artist/artist.module';
     CloudinaryModule,
     PoliciesModule,
     TattoocareModule,
+    NewsModule,
   ],
   controllers: [],
   providers: [],
