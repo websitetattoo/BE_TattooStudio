@@ -1,5 +1,8 @@
+//Libary
 import { Injectable, NotFoundException } from '@nestjs/common';
+//Entities
 import { Policies } from 'src/entities/policies.entity';
+//Repositories
 import { PoliciesRepository } from 'src/repositories/policies.repository';
 
 @Injectable()
@@ -20,7 +23,7 @@ export class PoliciesService {
 
       return createPolicy;
     } catch (error) {
-      throw error; // Rethrow the error for handling at a higher level
+      throw error;
     }
   }
 

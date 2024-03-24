@@ -1,3 +1,4 @@
+//Libary
 import {
   Body,
   Controller,
@@ -6,41 +7,57 @@ import {
   Param,
   Post,
   Put,
+  UploadedFiles,
 } from '@nestjs/common';
-import { NewsService } from './news.service';
-import { News } from 'src/entities/news.entity';
 
-@Controller('news')
+import { News } from 'src/entities/News.entity';
+import { NewsService } from './News.service';
+
+@Controller('News')
 export class NewsController {
-  constructor(private newsService: NewsService) {}
+  constructor(private Newservice: NewsService) {}
 
-  //Ex: http://localhost:3000/Newss - GET
+  //Ex: http://localhost:5000/News - GET
   @Get()
-  async getAllNews(): Promise<News[]> {
-    return this.newsService.findAll();
+  async getAll(): Promise<News[]> {
+    return this.Newservice.findAll();
   }
 
-  // Lấy một News cụ thể
+  //Ex: http://localhost:5000/News - POST
+  @Post()
+  async create(
+    @Body() data: any,
+    @UploadedFiles()
+    files: {
+      avatar?: Express.Multer.File;
+      images?: Express.Multer.File[];
+    },
+  ): Promise<any> {
+    return this.Newservice.create(data, files);
+  }
+
+  //Ex: http://localhost:5000/News/${id} - GET
   @Get(':id')
-  async getNewsById(@Param('id') id: string): Promise<News> {
-    return this.newsService.findById(id);
+  async getById(@Param('id') id: string): Promise<News> {
+    return this.Newservice.findById(id);
   }
 
-  //Ex: http://localhost:3000/News - POST
-  @Post('/createNews')
-  async createNews(@Body() data: any): Promise<any> {
-    return this.newsService.create(data);
-  }
-
-  // Cập nhật News
+  //Ex: http://localhost:5000/News/${id} - PUT
   @Put(':id')
-  async updateNews(@Param('id') id: string, @Body() data: any): Promise<News> {
-    return this.newsService.updateNews(id, data);
+  async update(
+    @Param('id') id: string,
+    @Body() data: any,
+    @UploadedFiles()
+    files: {
+      image?: Express.Multer.File[];
+    },
+  ): Promise<News> {
+    return this.Newservice.update(id, data, files);
   }
 
-  // Xóa News
+  //Ex: http://localhost:5000/News/${id} - DELETE
   @Delete(':id')
-  async deleteNews(@Param('id') id: string): Promise<void> {
-    return this.newsService.removeNews(id);
+  async remove(@Param('id') id: string): Promise<void> {
+    return this.Newservice.remove(id);
   }
 }

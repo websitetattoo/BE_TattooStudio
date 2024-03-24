@@ -1,5 +1,8 @@
+//Libary
 import { Injectable, NotFoundException } from '@nestjs/common';
+//Entities
 import { Tattoocare } from 'src/entities/Tattoocare.entity';
+//Repositories
 import { TattoocareRepository } from 'src/repositories/tattoocare.repository';
 
 @Injectable()

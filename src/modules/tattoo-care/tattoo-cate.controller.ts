@@ -1,3 +1,4 @@
+//Libary
 import {
   Body,
   Controller,
@@ -7,7 +8,9 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+//Entities
 import { Tattoocare } from 'src/entities/tattoocare.entity';
+//./
 import { TattoocareService } from './tattoo-care.service';
 
 @Controller('tattoocare')

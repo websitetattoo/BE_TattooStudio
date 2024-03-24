@@ -15,8 +15,8 @@ export class Artist extends Document {
   @Prop({ required: true })
   avatar: string;
 
-  @Prop()
-  images: string[];
+  @Prop({ type: [{ url: String }], default: [] })
+  images: { url: string; _id: string }[];
 
   @Prop()
   link: string;

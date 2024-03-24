@@ -7,7 +7,7 @@ export class Images extends Document {
   id: number;
 
   @Prop({ required: true })
-  images: string[];
+  Images: string[];
 }
 
 export const ImagesSchema = SchemaFactory.createForClass(Images);
