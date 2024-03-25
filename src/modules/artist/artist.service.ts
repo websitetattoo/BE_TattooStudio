@@ -10,8 +10,8 @@ export class ArtistService {
     private cloudinaryService: CloudinaryService,
   ) {}
 
-  async findAll(): Promise<Artist[]> {
-    return this.ArtistRepository.findAll();
+  async findAll(query: any): Promise<Artist[]> {
+    return this.ArtistRepository.findAll(query);
   }
 
   async create(data: any, files: any): Promise<Artist> {
@@ -21,12 +21,16 @@ export class ArtistService {
       });
       const uploadResult = await Promise.all(uploadImages);
 
+      //Tạo đối tượng ảnh với id, url
+      const newImages = uploadResult.slice(1).map((image) => ({
+        url: image.secure_url,
+      }));
       const newArtist: Artist = {
         ...data,
         avatar: uploadResult[0]?.secure_url,
-        images: uploadResult.slice(1).map((image) => image.secure_url),
+        images: newImages,
       };
-      const createArtist = await this.ArtistRepository.createArtist(newArtist);
+      const createArtist = await this.ArtistRepository.create(newArtist);
 
       return createArtist;
     } catch (error) {
@@ -42,11 +46,45 @@ export class ArtistService {
     return Artist;
   }
 
-  async updateArtist(id: string, data: Artist): Promise<Artist> {
-    return await this.ArtistRepository.updateArtist(id, data);
+  async update(id: string, data: any, files: any): Promise<Artist> {
+    try {
+      // Truy vấn Artist cũ để lấy đường dẫn ảnh cũ từ db
+      const oldArtist = await this.ArtistRepository.findById(id);
+      if (!oldArtist) {
+        throw new Error('Image Artist not found');
+      }
+      // Xoá ảnh đại diện trên cloudinary
+      if (oldArtist.avatar) {
+        await this.cloudinaryService.deleteImage(oldArtist.avatar);
+      }
+
+      //Ubload ảnh đại diện
+      const uploadImages = files.map((file: any) => {
+        return this.cloudinaryService.uploadImage(file);
+      });
+      const uploadResult = await Promise.all(uploadImages);
+
+      const newData: Artist = {
+        ...data,
+        avatar: uploadResult[0]?.secure_url,
+        images: uploadResult.slice(1).map((image) => image.secure_url),
+      };
+      return await this.ArtistRepository.update(id, newData);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async removeArtist(id: string): Promise<void> {
-    await this.ArtistRepository.removeArtist(id);
+  async remove(id: string): Promise<void> {
+    const oldArtist = await this.ArtistRepository.findById(id);
+    if (!oldArtist) {
+      throw new Error('Image Artist not found');
+    }
+
+    // Xoá ảnh trên Cloudinary khi news bị xoá
+    if (oldArtist.avatar) {
+      await this.cloudinaryService.deleteImage(oldArtist.avatar);
+    }
+    await this.ArtistRepository.remove(id);
   }
 }

@@ -1,6 +1,8 @@
+//Libary
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+//Entities
 import { Images } from 'src/entities/images.entity';
 
 @Injectable()

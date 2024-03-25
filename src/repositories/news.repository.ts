@@ -1,41 +1,59 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+//Libary
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+//Entities
 import { News } from 'src/entities/news.entity';
 
 @Injectable()
 export class NewsRepository {
-  constructor(@InjectModel(News.name) private newsModel: Model<News>) {}
+  constructor(@InjectModel(News.name) private NewsModel: Model<News>) {}
 
   async findAll(): Promise<News[]> {
-    return this.newsModel.find().exec();
+    return this.NewsModel.find().exec();
+  }
+
+  async create(data: News): Promise<News> {
+    const newEmmloyee = new this.NewsModel(data);
+    return newEmmloyee.save();
   }
 
   async findById(id: string): Promise<News> {
-    return this.newsModel.findById(id).exec();
+    return this.NewsModel.findById(id).exec();
   }
 
-  async createNews(data: News): Promise<News> {
-    const newEmployee = new this.newsModel(data);
-    return newEmployee.save();
-  }
+  async update(id: string, data: News): Promise<News> {
+    const News = await this.NewsModel.findById(id);
 
-  async updateNews(id: string, data: News): Promise<News> {
-    // Kiểm tra xem News có tồn tại không
-    const existingNews = await this.findById(id);
-    if (!existingNews) {
-      throw new NotFoundException(`News with ID ${id} not found.`);
+    if (!News) {
+      return null;
     }
 
-    // Cập nhật dữ liệu của News
-    const updatedNews = await this.newsModel
-      .findByIdAndUpdate(id, data, { new: true })
-      .exec();
+    Object.keys(data).forEach((key) => {
+      if (data[key] !== undefined) {
+        News[key] = data[key];
+      }
+    });
 
+    const updatedNews = await News.save();
     return updatedNews;
   }
 
-  async removeNews(id: string): Promise<void> {
-    await this.newsModel.findByIdAndDelete(id).exec();
+  async remove(id: string): Promise<{ status: number; message: string }> {
+    try {
+      const news = await this.NewsModel.findById(id);
+      if (!news) {
+        return { status: 404, message: 'News not found' };
+      }
+
+      const result = await this.NewsModel.deleteOne({ _id: id });
+      if (result.deletedCount > 0) {
+        return { status: 204, message: 'News deleted successfully' };
+      } else {
+        return { status: 500, message: 'Failed to delete news' };
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 }

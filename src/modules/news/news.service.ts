@@ -1,41 +1,88 @@
+//Libary
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { News } from 'src/entities/news.entity';
+//Cloudinary
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+//Repositories
 import { NewsRepository } from 'src/repositories/news.repository';
+//Entities
+import { News } from 'src/entities/News.entity';
 
 @Injectable()
 export class NewsService {
-  constructor(private newsRepository: NewsRepository) {}
+  constructor(
+    private NewsRepository: NewsRepository,
+    private cloudinaryService: CloudinaryService,
+  ) {}
 
   async findAll(): Promise<News[]> {
-    return this.newsRepository.findAll();
+    return this.NewsRepository.findAll();
   }
 
-  async create(data: any): Promise<News> {
+  async create(data: any, files: any): Promise<News> {
     try {
-      const news: News = {
+      const uploadImages = files.map((file: any) => {
+        return this.cloudinaryService.uploadImage(file);
+      });
+      const uploadResult = await Promise.all(uploadImages);
+
+      const newNews: News = {
         ...data,
+        image: uploadResult[0]?.secure_url,
       };
-      const createNews = await this.newsRepository.createNews(news);
+      const createNews = await this.NewsRepository.create(newNews);
 
       return createNews;
     } catch (error) {
-      throw error; // Rethrow the error for handling at a higher level
+      throw error;
     }
   }
 
   async findById(id: string): Promise<News> {
-    const news = await this.newsRepository.findById(id);
-    if (!news) {
+    const News = await this.NewsRepository.findById(id);
+    if (!News) {
       throw new NotFoundException(`News with ID ${id} not found.`);
     }
-    return news;
+    return News;
   }
 
-  async updateNews(id: string, data: News): Promise<News> {
-    return await this.newsRepository.updateNews(id, data);
+  async update(id: string, data: any, files: any): Promise<News> {
+    try {
+      // Truy vấn News cũ để lấy đường dẫn ảnh cũ từ db
+      const oldNews = await this.NewsRepository.findById(id);
+      if (!oldNews) {
+        throw new Error('Image news not found');
+      }
+      // Xoá ảnh cũ trên Cloudinary
+      if (oldNews.image) {
+        await this.cloudinaryService.deleteImage(oldNews.image);
+      }
+
+      const uploadImages = files.map((file: any) => {
+        return this.cloudinaryService.uploadImage(file);
+      });
+      const uploadResult = await Promise.all(uploadImages);
+
+      const newData: News = {
+        ...data,
+        image: uploadResult[0]?.secure_url,
+      };
+
+      return await this.NewsRepository.update(id, newData);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async removeNews(id: string): Promise<void> {
-    await this.newsRepository.removeNews(id);
+  async remove(id: string): Promise<void> {
+    const oldNews = await this.NewsRepository.findById(id);
+    if (!oldNews) {
+      throw new Error('Image news not found');
+    }
+
+    // Xoá ảnh trên Cloudinary khi news bị xoá
+    if (oldNews.image) {
+      await this.cloudinaryService.deleteImage(oldNews.image);
+    }
+    await this.NewsRepository.remove(id);
   }
 }

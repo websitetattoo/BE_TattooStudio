@@ -1,9 +1,15 @@
+//Libary
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { News, NewsSchema } from 'src/entities/news.entity';
+//./
+import { NewsService } from './News.service';
+import { NewsController } from './News.controller';
+//.Entities
+import { News, NewsSchema } from 'src/entities/News.entity';
+//Cloudinary
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+//Repositories
 import { NewsRepository } from 'src/repositories/news.repository';
-import { NewsService } from './news.service';
-import { NewsController } from './news.controller';
 
 @Module({
   imports: [
@@ -15,7 +21,7 @@ import { NewsController } from './news.controller';
     ]),
   ],
   controllers: [NewsController],
-  providers: [NewsRepository, NewsService],
+  providers: [NewsRepository, NewsService, CloudinaryService],
   exports: [NewsService, NewsRepository],
 })
 export default class NewsModule {}

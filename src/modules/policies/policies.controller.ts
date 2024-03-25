@@ -1,3 +1,4 @@
+//Libary
 import {
   Body,
   Controller,
@@ -7,14 +8,16 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+//./
 import { PoliciesService } from './policies.service';
+//Entities
 import { Policies } from 'src/entities/policies.entity';
 
 @Controller('policies')
 export class PoliciesController {
   constructor(private policiesService: PoliciesService) {}
 
-  //API lấy tất cả chính sách trong database
+  //API lấy tất cả nhân viên trong danh sách
   //Ex: http://localhost:3001/policiess - GET
   @Get()
   async getAllPolicies(): Promise<Policies[]> {
@@ -27,9 +30,9 @@ export class PoliciesController {
     return this.policiesService.findById(id);
   }
 
-  //API lưu thông tin chính sách vào db
+  //API lưu thông tin nhân viên vào db
   //Ex: http://localhost:3001/policies - POST
-  @Post('/create')
+  @Post('/createPolicies')
   async createPolicies(@Body() data: any): Promise<any> {
     return this.policiesService.create(data);
   }

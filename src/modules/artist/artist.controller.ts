@@ -1,3 +1,4 @@
+//Libary
 import {
   Body,
   Controller,
@@ -6,24 +7,29 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UploadedFiles,
+  UsePipes,
 } from '@nestjs/common';
+
 import { Artist } from 'src/entities/artist.entity';
 import { ArtistService } from './artist.service';
+import { QueryParserPipe } from 'src/query/query-parser.pipe';
 
 @Controller('Artist')
 export class ArtistController {
   constructor(private Artistervice: ArtistService) {}
 
-  //Ex: http://localhost:3001/Artist - GET
+  //Ex: http://localhost:5000/Artist - GET
   @Get()
-  async getAllArtist(): Promise<Artist[]> {
-    return this.Artistervice.findAll();
+  @UsePipes(QueryParserPipe)
+  async getAll(@Query() query?: string): Promise<Artist[]> {
+    return this.Artistervice.findAll(query);
   }
 
-  //Ex: http://localhost:3001/Artist - POST
+  //Ex: http://localhost:5000/Artist - POST
   @Post()
-  async createArtist(
+  async create(
     @Body() data: any,
     @UploadedFiles()
     files: {
@@ -34,24 +40,29 @@ export class ArtistController {
     return this.Artistervice.create(data, files);
   }
 
-  //Ex: http://localhost:3001/Artist/${id} - GET
+  //Ex: http://localhost:5000/Artist/${id} - GET
   @Get(':id')
-  async getArtistById(@Param('id') id: string): Promise<Artist> {
+  async getById(@Param('id') id: string): Promise<Artist> {
     return this.Artistervice.findById(id);
   }
 
-  //Ex: http://localhost:3001/Artist/${id} - PUT
+  //Ex: http://localhost:5000/Artist/${id} - PUT
   @Put(':id')
-  async updateArtist(
+  async update(
     @Param('id') id: string,
     @Body() data: any,
+    @UploadedFiles()
+    files: {
+      avatar?: Express.Multer.File[];
+      images?: Express.Multer.File[];
+    },
   ): Promise<Artist> {
-    return this.Artistervice.updateArtist(id, data);
+    return this.Artistervice.update(id, data, files);
   }
 
-  //Ex: http://localhost:3001/Artist/${id} - DELETE
+  //Ex: http://localhost:5000/Artist/${id} - DELETE
   @Delete(':id')
-  async removeArtist(@Param('id') id: string): Promise<void> {
-    return this.Artistervice.removeArtist(id);
+  async remove(@Param('id') id: string): Promise<void> {
+    return this.Artistervice.remove(id);
   }
 }

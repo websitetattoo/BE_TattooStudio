@@ -3,17 +3,17 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class News extends Document {
-  @Prop()
-  Image: File;
-
-  @Prop()
+  @Prop({ required: true })
   title: string;
 
-  @Prop()
-  content: string;
+  @Prop({ required: true, default: Date.now })
+  createdDate: Date;
 
-  @Prop()
-  createDate: Date;
+  @Prop({ required: true })
+  image: string;
+
+  @Prop({ required: true })
+  content: string;
 }
 
 export const NewsSchema = SchemaFactory.createForClass(News);

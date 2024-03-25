@@ -1,6 +1,8 @@
+//Libary
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+//Entities
 import { Tattoocare } from 'src/entities/tattoocare.entity';
 
 @Injectable()
