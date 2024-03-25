@@ -7,10 +7,10 @@ export class Policies extends Document {
   headerTitle: string;
 
   @Prop()
-  title: string[];
+  title: string;
 
   @Prop()
-  content: string[];
+  content: string;
 }
 
 export const PoliciesSchema = SchemaFactory.createForClass(Policies);
