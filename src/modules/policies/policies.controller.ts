@@ -17,29 +17,29 @@ import { Policies } from 'src/entities/policies.entity';
 export class PoliciesController {
   constructor(private policiesService: PoliciesService) {}
 
-  //API lấy tất cả nhân viên trong danh sách
-  //Ex: http://localhost:3001/policiess - GET
+  //API lấy tất cả chính sách trong db
+  //Ex: http://localhost:3001/policies - GET
   @Get()
-  async getAllPolicies(): Promise<Policies[]> {
+  async getPolicies(): Promise<Policies[]> {
     return this.policiesService.findAll();
   }
 
   // Lấy một chính sách cụ thể theo ID
   @Get(':id')
-  async getPoliciesById(@Param('id') id: string): Promise<Policies> {
+  async getPolicyById(@Param('id') id: string): Promise<Policies> {
     return this.policiesService.findById(id);
   }
 
-  //API lưu thông tin nhân viên vào db
-  //Ex: http://localhost:3001/policies - POST
-  @Post('/createPolicies')
-  async createPolicies(@Body() data: any): Promise<any> {
+  //API lưu thông tin chính sách vào db
+  //Ex: http://localhost:3001/policies/create - POST
+  @Post('/create')
+  async createPolicy(@Body() data: any): Promise<any> {
     return this.policiesService.create(data);
   }
 
   // Cập nhật chính sách
   @Put(':id')
-  async updatePolicies(
+  async updatePolicy(
     @Param('id') id: string,
     @Body() data: any,
   ): Promise<Policies> {
@@ -48,7 +48,7 @@ export class PoliciesController {
 
   // Xóa chính sách
   @Delete(':id')
-  async deletePolicies(@Param('id') id: string): Promise<void> {
+  async deletePolicy(@Param('id') id: string): Promise<{ message: string }> {
     return this.policiesService.removePolicy(id);
   }
 }

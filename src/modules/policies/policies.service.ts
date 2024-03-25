@@ -39,7 +39,7 @@ export class PoliciesService {
     return await this.policiesRepository.updatePolicy(id, data);
   }
 
-  async removePolicy(id: string): Promise<void> {
-    await this.policiesRepository.removePolicy(id);
+  async removePolicy(id: string): Promise<{ message: string }> {
+    return await this.policiesRepository.removePolicy(id);
   }
 }
