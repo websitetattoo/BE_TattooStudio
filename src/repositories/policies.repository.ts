@@ -39,7 +39,11 @@ export class PoliciesRepository {
     return updatedPolicy;
   }
 
-  async removePolicy(id: string): Promise<void> {
-    await this.policiesModel.findByIdAndDelete(id).exec();
+  async removePolicy(id: string): Promise<{ message: string }> {
+    const deletedPolicy = await this.policiesModel.findByIdAndDelete(id).exec();
+    if (!deletedPolicy) {
+      throw new NotFoundException(`Policy with ID ${id} not found.`);
+    }
+    return { message: `This policy deleted successfully.` };
   }
 }
