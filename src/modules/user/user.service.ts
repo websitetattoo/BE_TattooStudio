@@ -1,7 +1,5 @@
 //Libary
 import { Injectable } from '@nestjs/common/decorators';
-//Cloudinary
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 //Repositories
 import { UserRepository } from 'src/repositories/User.repository';
 //Entities
@@ -9,34 +7,30 @@ import { User } from 'src/entities/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly userRepository: UserRepository,
-    private readonly cloudinaryService: CloudinaryService,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async findAll(): Promise<User[]> {
     return this.userRepository.findAll();
   }
 
-  async create(userData: any, files: any): Promise<User> {
-    //Lặp qua mảng ảnh và tải lên cloudinary
-    const uploadPromises = files.map((file: any) => {
-      return this.cloudinaryService.uploadImage(file);
-    });
+  async create(data: any): Promise<User> {
+    try {
+      const newUser: User = {
+        ...data,
+      };
+      const createUser = await this.userRepository.create(newUser);
 
-    const uploadResults = await Promise.all(uploadPromises);
-    // Trích xuất URL của hình ảnh được tải lên
-    const rfImageUrl: string = uploadResults[0].secure_url;
-    const lcImageUrl: string = uploadResults[1].secure_url;
-    const addImageUrl: string = uploadResults[2].secure_url;
+      return createUser;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-    // Tạo đối tượng người dùng
-    const user: User = {
-      ...userData,
-      rfImage: rfImageUrl,
-      lcImage: lcImageUrl,
-      addImage: addImageUrl,
-    };
-    return this.userRepository.create(user);
+  async update(id: string, data: User): Promise<User> {
+    return await this.userRepository.update(id, data);
+  }
+
+  async remove(id: string): Promise<void> {
+    await this.userRepository.remove(id);
   }
 }
