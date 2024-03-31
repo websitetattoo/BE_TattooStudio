@@ -10,6 +10,7 @@ import { BookingRepository } from 'src/repositories/Booking.repository';
 //Email
 import { EmailService } from 'src/email/email.service';
 import { UserService } from '../user/user.service';
+import { ArtistService } from '../artist/artist.service';
 
 @Injectable()
 export class BookingService {
@@ -18,6 +19,7 @@ export class BookingService {
     private cloudinaryService: CloudinaryService,
     private userService: UserService,
     private emailService: EmailService,
+    private artistService: ArtistService,
   ) {}
   async findAll(query: any): Promise<Booking[]> {
     return this.bookingRepository.findAll(query);
@@ -25,8 +27,8 @@ export class BookingService {
   async create(data: any, files: any): Promise<Booking> {
     try {
       //Xử lý upload ảnh lên cloud
-      const uploadImages = files.map((file: any) => {
-        return this.cloudinaryService.uploadImage(file);
+      const uploadImages = files.map(async (file: any) => {
+        return this.cloudinaryService.uploadImageV2(file);
       });
       const uploadResult = await Promise.all(uploadImages);
 
@@ -37,9 +39,21 @@ export class BookingService {
       };
       const createBooking = await this.bookingRepository.create(newBooking);
 
+      const artistData = await this.artistService.findById(
+        createBooking.artist.toString(),
+      );
+
+      const newDataSendMail = {
+        ...createBooking.toObject(),
+        artist: artistData.name,
+      };
+
       // Gửi email booking
       const [firstUser] = await this.userService.findAll();
-      await this.emailService.sendEmailBooking(createBooking, firstUser.email);
+      await this.emailService.sendEmailBooking(
+        newDataSendMail,
+        firstUser.email,
+      );
 
       return createBooking;
     } catch (error) {

@@ -15,6 +15,10 @@ import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 //Email
 import { EmailService } from 'src/email/email.service';
 import { UserService } from '../user/user.service';
+//Artist
+import { ArtistService } from '../artist/artist.service';
+import { ArtistRepository } from 'src/repositories/Artist.repository';
+import { Artist, ArtistSchema } from 'src/entities/artist.entity';
 
 @Module({
   imports: [
@@ -30,6 +34,12 @@ import { UserService } from '../user/user.service';
         schema: UserSchema,
       },
     ]),
+    MongooseModule.forFeature([
+      {
+        name: Artist.name,
+        schema: ArtistSchema,
+      },
+    ]),
   ],
   controllers: [BookingController],
   providers: [
@@ -38,7 +48,9 @@ import { UserService } from '../user/user.service';
     CloudinaryService,
     UserService,
     UserRepository,
+    ArtistService,
     EmailService,
+    ArtistRepository,
   ],
   exports: [BookingService, BookingRepository],
 })
