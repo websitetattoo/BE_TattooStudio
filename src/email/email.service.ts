@@ -2,15 +2,10 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { OAuth2Client } from 'google-auth-library';
-//Entities
-import { Booking } from 'src/entities/Booking.entity';
 
 @Injectable()
 export class EmailService {
-  async sendEmailBooking(
-    data: Booking,
-    email: string = process.env.MAIL_ACCOUNT,
-  ) {
+  async sendEmailBooking(data: any, email: string = process.env.MAIL_ACCOUNT) {
     try {
       const GOOGLE_MAILER_CLIENT_ID = process.env.GOOGLE_MAILER_CLIENT_ID;
       const GOOGLE_MAILER_CLIENT_SECRET =
@@ -45,11 +40,22 @@ export class EmailService {
         },
       });
 
+      //Chuyển đổi time
+      const newSchedule = new Date(data?.schedule);
+      const formattedDate = newSchedule.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+
       const inforBooking = `
         <tr>
           <td style="border: 1px solid #dddddd; padding: 8px;"><b>${data?.name}</b></td>
           <td style="border: 1px solid #dddddd; padding: 8px;"><b>${data?.phone}</b></td>
+          <td style="border: 1px solid #dddddd; padding: 8px;">${data?.address}</td>
           <td style="border: 1px solid #dddddd; padding: 8px;">${data?.email}</td>
+          <td style="border: 1px solid #dddddd; padding: 8px;">${data?.artist}</td>
+          <td style="border: 1px solid #dddddd; padding: 8px;">${formattedDate}</td>
         </tr>
       `;
       const table = `
@@ -58,7 +64,10 @@ export class EmailService {
             <tr>
               <th style="border: 1px solid #dddddd; text-align: left; padding: 8px; background-color: #f2f2f2;">Name</th>
               <th style="border: 1px solid #dddddd; text-align: left; padding: 8px; background-color: #f2f2f2;">Phone</th>
+              <th style="border: 1px solid #dddddd; text-align: left; padding: 8px; background-color: #f2f2f2;">Address</th>
               <th style="border: 1px solid #dddddd; text-align: left; padding: 8px; background-color: #f2f2f2;">Email</th>
+              <th style="border: 1px solid #dddddd; text-align: left; padding: 8px; background-color: #f2f2f2;">Artist</th>
+              <th style="border: 1px solid #dddddd; text-align: left; padding: 8px; background-color: #f2f2f2;">schedule</th>
             </tr>
           </thead>
           <tbody>
@@ -67,11 +76,40 @@ export class EmailService {
         </table>
       `;
 
+      let listItem = '';
+      if (data.images && Array.isArray(data.images)) {
+        listItem = data.images
+          .map(
+            (img, index) => `
+              <tr>
+                <td style="border: 1px solid #dddddd; padding: 8px; font-weight: bold;">${index + 1}</td>
+                <td style="border: 1px solid #dddddd; padding: 8px;"><img src="${img}" alt="Img not found" style="max-width:300px; max-height:300px;"/></td>
+              </tr>
+            `,
+          )
+          .join('');
+      }
+
+      const tableImg = `
+      <table style="border-collapse: collapse; width: 100%;">
+        <thead>
+          <tr>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px; background-color: #f2f2f2;">STT</th>
+            <th style="border: 1px solid #dddddd; text-align: left; padding: 8px; background-color: #f2f2f2;">Image</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${listItem}
+        </tbody>
+      </table>
+      `;
+
       // Thông tin gửi từ phía client lên thông qua API
       const mailOptions = {
         to: email, // Gửi đến ai?
         subject: 'Booking Artist', // Tiêu đề email
-        html: `<div style="margin-bottom: 20px; text-align:center">${table}</div>`, // Nội dung email
+        html: `<div style="margin-bottom: 20px; text-align:center"><div>${table}</div>
+        <div style="margin-top: 20px;">${tableImg}</div></div>`, // Nội dung email
       };
 
       // Gọi hành động gửi email
