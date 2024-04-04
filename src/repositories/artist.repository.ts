@@ -10,9 +10,14 @@ export class ArtistRepository {
   constructor(@InjectModel(Artist.name) private ArtistModel: Model<Artist>) {}
 
   async findAll(query: any): Promise<Artist[]> {
-    const { filter, skip, limit, sort, projection, population } = query;
+    const { filter, limit, sort, projection, population } = query;
+
+    const page = query.page;
+    const offset = (page - 1) * limit;
+    delete filter.page;
+
     return await this.ArtistModel.find(filter)
-      .skip(skip)
+      .skip(offset)
       .limit(limit)
       .sort(sort)
       .select(projection)

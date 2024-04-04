@@ -9,8 +9,20 @@ import { News } from 'src/entities/news.entity';
 export class NewsRepository {
   constructor(@InjectModel(News.name) private NewsModel: Model<News>) {}
 
-  async findAll(): Promise<News[]> {
-    return this.NewsModel.find().exec();
+  async findAll(query: any): Promise<News[]> {
+    const { filter, limit, sort, projection, population } = query;
+
+    const page = query.page;
+    const offset = (page - 1) * limit;
+    delete filter.page;
+
+    return await this.NewsModel.find(filter)
+      .skip(offset)
+      .limit(limit)
+      .sort(sort)
+      .select(projection)
+      .populate(population)
+      .exec();
   }
 
   async create(data: News): Promise<News> {

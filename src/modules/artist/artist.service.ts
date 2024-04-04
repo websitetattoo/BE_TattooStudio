@@ -10,7 +10,7 @@ export class ArtistService {
     private cloudinaryService: CloudinaryService,
   ) {}
 
-  async findAll(query: any): Promise<Artist[]> {
+  async findAll(query: any = {}): Promise<Artist[]> {
     return this.ArtistRepository.findAll(query);
   }
 

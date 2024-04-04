@@ -7,11 +7,14 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UploadedFiles,
+  UsePipes,
 } from '@nestjs/common';
 
 import { News } from 'src/entities/News.entity';
 import { NewsService } from './News.service';
+import { QueryParserPipe } from 'src/query/query-parser.pipe';
 
 @Controller('News')
 export class NewsController {
@@ -19,8 +22,9 @@ export class NewsController {
 
   //Ex: http://localhost:5000/News - GET
   @Get()
-  async getAll(): Promise<News[]> {
-    return this.Newservice.findAll();
+  @UsePipes(QueryParserPipe)
+  async getAll(@Query() query?: string): Promise<News[]> {
+    return this.Newservice.findAll(query);
   }
 
   //Ex: http://localhost:5000/News - POST

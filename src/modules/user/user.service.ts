@@ -9,8 +9,8 @@ import { User } from 'src/entities/user.entity';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async findAll(): Promise<User[]> {
-    return this.userRepository.findAll();
+  async findAll(query: any = {}): Promise<User[]> {
+    return this.userRepository.findAll(query);
   }
 
   async create(data: any): Promise<User> {

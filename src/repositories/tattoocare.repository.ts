@@ -11,8 +11,20 @@ export class TattoocareRepository {
     @InjectModel(Tattoocare.name) private TattoocareModel: Model<Tattoocare>,
   ) {}
 
-  async findAll(): Promise<Tattoocare[]> {
-    return this.TattoocareModel.find().exec();
+  async findAll(query: any): Promise<Tattoocare[]> {
+    const { filter, limit, sort, projection, population } = query;
+
+    const page = query.page;
+    const offset = (page - 1) * limit;
+    delete filter.page;
+
+    return await this.TattoocareModel.find(filter)
+      .skip(offset)
+      .limit(limit)
+      .sort(sort)
+      .select(projection)
+      .populate(population)
+      .exec();
   }
 
   async findById(id: string): Promise<Tattoocare> {

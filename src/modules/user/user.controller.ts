@@ -7,11 +7,14 @@ import {
   Param,
   Post,
   Put,
+  Query,
+  UsePipes,
 } from '@nestjs/common/decorators';
 //./
 import { UserService } from './user.service';
 //Entities
 import { User } from 'src/entities/user.entity';
+import { QueryParserPipe } from 'src/query/query-parser.pipe';
 
 @Controller('user')
 export class UserController {
@@ -19,8 +22,9 @@ export class UserController {
 
   //Ex: http://localhost:5000/user - GET
   @Get()
-  async getAll(): Promise<User[]> {
-    return this.userService.findAll();
+  @UsePipes(QueryParserPipe)
+  async getAll(@Query() query?: string): Promise<User[]> {
+    return this.userService.findAll(query);
   }
 
   //Ex: http://localhost:5000/user - POST
