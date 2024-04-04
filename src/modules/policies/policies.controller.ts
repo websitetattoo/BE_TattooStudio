@@ -20,37 +20,39 @@ import { QueryParserPipe } from 'src/query/query-parser.pipe';
 export class PoliciesController {
   constructor(private policiesService: PoliciesService) {}
 
-  //Ex: http://localhost:3000/policiess - GET
+  //API lấy tất cả chính sách trong db
+  //Ex: http://localhost:3001/policies - GET
   @Get()
   @UsePipes(QueryParserPipe)
   async getAllPolicies(@Query() query?: string): Promise<Policies[]> {
     return this.policiesService.findAll(query);
   }
 
-  // Lấy một policies cụ thể
+  // Lấy một chính sách cụ thể theo ID
   @Get(':id')
-  async getPoliciesById(@Param('id') id: string): Promise<Policies> {
+  async getPolicyById(@Param('id') id: string): Promise<Policies> {
     return this.policiesService.findById(id);
   }
 
-  //Ex: http://localhost:3000/policies - POST
-  @Post('/createPolicies')
-  async createPolicies(@Body() data: any): Promise<any> {
+  //API lưu thông tin chính sách vào db
+  //Ex: http://localhost:3001/policies/create - POST
+  @Post('/create')
+  async createPolicy(@Body() data: any): Promise<any> {
     return this.policiesService.create(data);
   }
 
-  // Cập nhật policies
+  // Cập nhật chính sách
   @Put(':id')
-  async updatePolicies(
+  async updatePolicy(
     @Param('id') id: string,
     @Body() data: any,
   ): Promise<Policies> {
     return this.policiesService.updatePolicy(id, data);
   }
 
-  // Xóa policies
+  // Xóa chính sách
   @Delete(':id')
-  async deletePolicies(@Param('id') id: string): Promise<void> {
+  async deletePolicy(@Param('id') id: string): Promise<{ message: string }> {
     return this.policiesService.removePolicy(id);
   }
 }

@@ -4,13 +4,19 @@ import { Document } from 'mongoose';
 @Schema()
 export class Policies extends Document {
   @Prop()
-  headerTitle: string;
+  subtitle?: string;
 
   @Prop()
-  title: string[];
+  title: string;
 
   @Prop()
-  content: string[];
+  content: string;
+
+  @Prop()
+  isSubTitle?: boolean;
+
+  @Prop()
+  isImportant?: boolean;
 }
 
 export const PoliciesSchema = SchemaFactory.createForClass(Policies);
