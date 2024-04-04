@@ -11,8 +11,21 @@ export class PoliciesRepository {
     @InjectModel(Policies.name) private policiesModel: Model<Policies>,
   ) {}
 
-  async findAll(): Promise<Policies[]> {
-    return this.policiesModel.find().exec();
+  async findAll(query: any): Promise<Policies[]> {
+    const { filter, limit, sort, projection, population } = query;
+
+    const page = query.page;
+    const offset = (page - 1) * limit;
+    delete filter.page;
+
+    return await this.policiesModel
+      .find(filter)
+      .skip(offset)
+      .limit(limit)
+      .sort(sort)
+      .select(projection)
+      .populate(population)
+      .exec();
   }
 
   async findById(id: string): Promise<Policies> {

@@ -9,8 +9,8 @@ import { TattoocareRepository } from 'src/repositories/tattoocare.repository';
 export class TattoocareService {
   constructor(private TattoocareRepository: TattoocareRepository) {}
 
-  async findAll(): Promise<Tattoocare[]> {
-    return this.TattoocareRepository.findAll();
+  async findAll(query: any): Promise<Tattoocare[]> {
+    return this.TattoocareRepository.findAll(query);
   }
 
   async create(data: any): Promise<Tattoocare> {

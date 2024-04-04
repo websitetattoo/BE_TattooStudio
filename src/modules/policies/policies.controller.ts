@@ -7,11 +7,14 @@ import {
   Param,
   Post,
   Put,
+  Query,
+  UsePipes,
 } from '@nestjs/common';
 //./
 import { PoliciesService } from './policies.service';
 //Entities
 import { Policies } from 'src/entities/policies.entity';
+import { QueryParserPipe } from 'src/query/query-parser.pipe';
 
 @Controller('policies')
 export class PoliciesController {
@@ -19,8 +22,9 @@ export class PoliciesController {
 
   //Ex: http://localhost:3000/policiess - GET
   @Get()
-  async getAllPolicies(): Promise<Policies[]> {
-    return this.policiesService.findAll();
+  @UsePipes(QueryParserPipe)
+  async getAllPolicies(@Query() query?: string): Promise<Policies[]> {
+    return this.policiesService.findAll(query);
   }
 
   // Lấy một policies cụ thể

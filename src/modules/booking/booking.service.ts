@@ -21,7 +21,7 @@ export class BookingService {
     private emailService: EmailService,
     private artistService: ArtistService,
   ) {}
-  async findAll(query: any): Promise<Booking[]> {
+  async findAll(query: any = {}): Promise<Booking[]> {
     return this.bookingRepository.findAll(query);
   }
   async create(data: any, files: any): Promise<Booking> {

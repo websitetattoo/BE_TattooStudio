@@ -9,8 +9,8 @@ import { PoliciesRepository } from 'src/repositories/policies.repository';
 export class PoliciesService {
   constructor(private policiesRepository: PoliciesRepository) {}
 
-  async findAll(): Promise<Policies[]> {
-    return this.policiesRepository.findAll();
+  async findAll(query: any = {}): Promise<Policies[]> {
+    return this.policiesRepository.findAll(query);
   }
 
   async create(data: any): Promise<Policies> {

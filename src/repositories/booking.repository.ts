@@ -12,10 +12,15 @@ export class BookingRepository {
   ) {}
 
   async findAll(query: any): Promise<Booking[]> {
-    const { filter, skip, limit, sort, projection, population } = query;
+    const { filter, limit, sort, projection, population } = query;
+
+    const page = query.page;
+    const offset = (page - 1) * limit;
+    delete filter.page;
+
     return await this.bookingModel
       .find(filter)
-      .skip(skip)
+      .skip(offset)
       .limit(limit)
       .sort(sort)
       .select(projection)
