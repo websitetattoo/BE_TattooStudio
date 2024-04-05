@@ -2,38 +2,49 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
-  UploadedFiles,
+  Put,
+  Query,
+  UsePipes,
 } from '@nestjs/common/decorators';
 //./
 import { UserService } from './user.service';
 //Entities
 import { User } from 'src/entities/user.entity';
+import { QueryParserPipe } from 'src/query/query-parser.pipe';
 
-@Controller('users')
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  //API lấy tất cả danh sách khách hàng
-  //Ex: http://localhost:3000/users - GET
+  //Ex: http://localhost:5000/user - GET
   @Get()
-  async getAllUsers(): Promise<User[]> {
-    return this.userService.findAll();
+  @UsePipes(QueryParserPipe)
+  async getAll(@Query() query?: string): Promise<User[]> {
+    return this.userService.findAll(query);
   }
 
-  //API lưu thông tin khách hàng đặt lịch
-  //Ex: http://localhost:3000/users - POST
+  //Ex: http://localhost:5000/user - POST
   @Post()
-  async createUser(
-    @Body() userData: any,
-    @UploadedFiles()
-    files: {
-      rfImage?: Express.Multer.File[];
-      lcImage?: Express.Multer.File[];
-      addImage?: Express.Multer.File[];
-    },
+  async create(@Body() data: any): Promise<any> {
+    return this.userService.create(data);
+  }
+
+  //Ex: http://localhost:5000/user/${id} - Put
+  @Put(':id')
+  async updatetattoocare(
+    @Param('id') id: string,
+    @Body() data: any,
   ): Promise<any> {
-    return this.userService.create(userData, files);
+    return this.userService.update(id, data);
+  }
+
+  //Ex: http://localhost:5000/user/${id} - Delete
+  @Delete(':id')
+  async deletetattoocare(@Param('id') id: string): Promise<void> {
+    return this.userService.remove(id);
   }
 }

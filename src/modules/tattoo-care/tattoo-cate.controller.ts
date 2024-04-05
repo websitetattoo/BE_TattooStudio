@@ -7,11 +7,14 @@ import {
   Param,
   Post,
   Put,
+  Query,
+  UsePipes,
 } from '@nestjs/common';
 //Entities
 import { Tattoocare } from 'src/entities/tattoocare.entity';
 //./
 import { TattoocareService } from './tattoo-care.service';
+import { QueryParserPipe } from 'src/query/query-parser.pipe';
 
 @Controller('tattoocare')
 export class TattoocareController {
@@ -19,8 +22,9 @@ export class TattoocareController {
 
   //Ex: http://localhost:3001/tattoocare - GET
   @Get()
-  async getAlltattoocare(): Promise<Tattoocare[]> {
-    return this.TattoocareService.findAll();
+  @UsePipes(QueryParserPipe)
+  async getAlltattoocare(@Query() query?: string): Promise<Tattoocare[]> {
+    return this.TattoocareService.findAll(query);
   }
 
   // Lấy một tattoocare cụ thể
