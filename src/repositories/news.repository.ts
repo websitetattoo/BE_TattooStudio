@@ -7,7 +7,8 @@ import { News } from 'src/entities/news.entity';
 
 @Injectable()
 export class NewsRepository {
-  constructor(@InjectModel(News.name) private NewsModel: Model<News>) {}
+  constructor(@InjectModel(News.name) private newsModel: Model<News>) {}
+
 
   async findAll(query: any): Promise<News[]> {
     const { filter, limit, sort, projection, population } = query;
@@ -26,39 +27,39 @@ export class NewsRepository {
   }
 
   async create(data: News): Promise<News> {
-    const newEmmloyee = new this.NewsModel(data);
-    return newEmmloyee.save();
+    const createdNews = new this.newsModel(data);
+    return createdNews.save();
   }
 
   async findById(id: string): Promise<News> {
-    return this.NewsModel.findById(id).exec();
+    return this.newsModel.findById(id).exec();
   }
 
   async update(id: string, data: News): Promise<News> {
-    const News = await this.NewsModel.findById(id);
+    const news = await this.newsModel.findById(id);
 
-    if (!News) {
+    if (!news) {
       return null;
     }
 
     Object.keys(data).forEach((key) => {
       if (data[key] !== undefined) {
-        News[key] = data[key];
+        news[key] = data[key];
       }
     });
 
-    const updatedNews = await News.save();
+    const updatedNews = await news.save();
     return updatedNews;
   }
 
   async remove(id: string): Promise<{ status: number; message: string }> {
     try {
-      const news = await this.NewsModel.findById(id);
+      const news = await this.newsModel.findById(id);
       if (!news) {
         return { status: 404, message: 'News not found' };
       }
 
-      const result = await this.NewsModel.deleteOne({ _id: id });
+      const result = await this.newsModel.deleteOne({ _id: id });
       if (result.deletedCount > 0) {
         return { status: 204, message: 'News deleted successfully' };
       } else {
