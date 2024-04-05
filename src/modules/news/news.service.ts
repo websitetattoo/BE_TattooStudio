@@ -14,9 +14,8 @@ export class NewsService {
     private cloudinaryService: CloudinaryService,
   ) {}
 
-
   async findAll(query: any = {}): Promise<News[]> {
-    return this.NewsRepository.findAll(query);
+    return this.newsRepository.findAll(query);
   }
 
   async create(data: any, file: any): Promise<News> {
