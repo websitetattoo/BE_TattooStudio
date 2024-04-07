@@ -22,7 +22,9 @@ export class BookingController {
   //Ex: http://localhost:5000/Booking- GET
   @Get()
   @UsePipes(QueryParserPipe)
-  async getAll(@Query() query?: string): Promise<Booking[]> {
+  async getAll(
+    @Query() query?: string,
+  ): Promise<{ data: Booking[]; total: number }> {
     return this.bookingService.findAll(query);
   }
 

@@ -23,7 +23,9 @@ export class TattoocareController {
   //Ex: http://localhost:3001/tattoocare - GET
   @Get()
   @UsePipes(QueryParserPipe)
-  async getAlltattoocare(@Query() query?: string): Promise<Tattoocare[]> {
+  async getAlltattoocare(
+    @Query() query?: string,
+  ): Promise<{ data: Tattoocare[]; total: number }> {
     return this.TattoocareService.findAll(query);
   }
 

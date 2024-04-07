@@ -24,7 +24,9 @@ export class PoliciesController {
   //Ex: http://localhost:3001/policies - GET
   @Get()
   @UsePipes(QueryParserPipe)
-  async getAllPolicies(@Query() query?: string): Promise<Policies[]> {
+  async getAllPolicies(
+    @Query() query?: string,
+  ): Promise<{ data: Policies[]; total: number }> {
     return this.policiesService.findAll(query);
   }
 
@@ -36,7 +38,7 @@ export class PoliciesController {
 
   //API lưu thông tin chính sách vào db
   //Ex: http://localhost:3001/policies/create - POST
-  @Post('/create')
+  @Post()
   async createPolicy(@Body() data: any): Promise<any> {
     return this.policiesService.create(data);
   }

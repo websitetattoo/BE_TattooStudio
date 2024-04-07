@@ -23,7 +23,9 @@ export class ArtistController {
   //Ex: http://localhost:5000/Artist - GET
   @Get()
   @UsePipes(QueryParserPipe)
-  async getAll(@Query() query?: string): Promise<Artist[]> {
+  async getAll(
+    @Query() query?: string,
+  ): Promise<{ data: Artist[]; total: number }> {
     return this.Artistervice.findAll(query);
   }
 

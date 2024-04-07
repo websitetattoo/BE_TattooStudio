@@ -9,20 +9,23 @@ import { Artist } from 'src/entities/artist.entity';
 export class ArtistRepository {
   constructor(@InjectModel(Artist.name) private ArtistModel: Model<Artist>) {}
 
-  async findAll(query: any): Promise<Artist[]> {
+  async findAll(query: any): Promise<{ data: Artist[]; total: number }> {
     const { filter, limit, sort, projection, population } = query;
 
     const page = query.page;
     const offset = (page - 1) * limit;
     delete filter.page;
 
-    return await this.ArtistModel.find(filter)
+    const total = await this.ArtistModel.countDocuments(filter);
+    const data = await this.ArtistModel.find(filter)
       .skip(offset)
       .limit(limit)
       .sort(sort)
       .select(projection)
       .populate(population)
       .exec();
+
+    return { data, total };
   }
 
   async create(data: Artist): Promise<Artist> {

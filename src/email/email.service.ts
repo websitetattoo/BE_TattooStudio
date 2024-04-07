@@ -50,8 +50,8 @@ export class EmailService {
 
       const inforBooking = `
         <tr>
-          <td style="border: 1px solid #dddddd; padding: 8px;"><b>${data?.name}</b></td>
-          <td style="border: 1px solid #dddddd; padding: 8px;"><b>${data?.phone}</b></td>
+          <td style="border: 1px solid #dddddd; padding: 8px;">${data?.name}</td>
+          <td style="border: 1px solid #dddddd; padding: 8px;">${data?.phone}</td>
           <td style="border: 1px solid #dddddd; padding: 8px;">${data?.address}</td>
           <td style="border: 1px solid #dddddd; padding: 8px;">${data?.email}</td>
           <td style="border: 1px solid #dddddd; padding: 8px;">${data?.artist}</td>

@@ -9,7 +9,7 @@ import { PoliciesRepository } from 'src/repositories/policies.repository';
 export class PoliciesService {
   constructor(private policiesRepository: PoliciesRepository) {}
 
-  async findAll(query: any = {}): Promise<Policies[]> {
+  async findAll(query: any): Promise<{ data: Policies[]; total: number }> {
     return this.policiesRepository.findAll(query);
   }
 
