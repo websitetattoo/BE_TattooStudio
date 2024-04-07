@@ -11,14 +11,15 @@ export class BookingRepository {
     @InjectModel(Booking.name) private bookingModel: Model<Booking>,
   ) {}
 
-  async findAll(query: any): Promise<Booking[]> {
+  async findAll(query: any): Promise<{ data: Booking[]; total: number }> {
     const { filter, limit, sort, projection, population } = query;
 
     const page = query.page;
     const offset = (page - 1) * limit;
     delete filter.page;
 
-    return await this.bookingModel
+    const total = await this.bookingModel.countDocuments(filter);
+    const data = await this.bookingModel
       .find(filter)
       .skip(offset)
       .limit(limit)
@@ -26,6 +27,8 @@ export class BookingRepository {
       .select(projection)
       .populate(population)
       .exec();
+
+    return { data, total };
   }
 
   async create(data: Booking): Promise<Booking> {

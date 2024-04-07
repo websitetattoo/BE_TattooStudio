@@ -23,7 +23,9 @@ export class NewsController {
   //Ex: http://localhost:5000/news - GET
   @Get()
   @UsePipes(QueryParserPipe)
-  async getAll(@Query() query?: string): Promise<News[]> {
+  async getAll(
+    @Query() query?: string,
+  ): Promise<{ data: News[]; total: number }> {
     return this.newsService.findAll(query);
   }
 

@@ -11,14 +11,15 @@ export class PoliciesRepository {
     @InjectModel(Policies.name) private policiesModel: Model<Policies>,
   ) {}
 
-  async findAll(query: any): Promise<Policies[]> {
+  async findAll(query: any): Promise<{ data: Policies[]; total: number }> {
     const { filter, limit, sort, projection, population } = query;
 
-    const page = query.page;
+    const page = filter.page;
     const offset = (page - 1) * limit;
     delete filter.page;
 
-    return await this.policiesModel
+    const total = await this.policiesModel.countDocuments(filter);
+    const data = await this.policiesModel
       .find(filter)
       .skip(offset)
       .limit(limit)
@@ -26,6 +27,8 @@ export class PoliciesRepository {
       .select(projection)
       .populate(population)
       .exec();
+
+    return { data, total };
   }
 
   async findById(id: string): Promise<Policies> {
