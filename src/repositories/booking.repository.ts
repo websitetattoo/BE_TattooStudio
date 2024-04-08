@@ -14,7 +14,7 @@ export class BookingRepository {
   async findAll(query: any): Promise<{ data: Booking[]; total: number }> {
     const { filter, limit, sort, projection, population } = query;
 
-    const page = query.page;
+    const page = filter.page;
     const offset = (page - 1) * limit;
     delete filter.page;
 
