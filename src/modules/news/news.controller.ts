@@ -30,7 +30,7 @@ export class NewsController {
   }
 
   //Ex: http://localhost:5000/news - POST
-  @Post('/create')
+  @Post()
   async create(
     @Body() data: any,
     @UploadedFiles()
