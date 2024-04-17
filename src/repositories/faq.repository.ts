@@ -8,8 +8,24 @@ import { Faq } from 'src/entities/Faq.entity';
 @Injectable()
 export class FaqRepository {
   constructor(@InjectModel(Faq.name) private FaqModel: Model<Faq>) {}
-  async findAll(): Promise<Faq[]> {
-    return this.FaqModel.find().exec();
+
+  async findAll(query: any): Promise<{ data: Faq[]; total: number }> {
+    const { filter, limit, sort, projection, population } = query;
+
+    const page = filter.page;
+    const offset = (page - 1) * limit;
+    delete filter.page;
+
+    const total = await this.FaqModel.countDocuments(filter);
+    const data = await this.FaqModel.find(filter)
+      .skip(offset)
+      .limit(limit)
+      .sort(sort)
+      .select(projection)
+      .populate(population)
+      .exec();
+
+    return { data, total };
   }
 
   async create(data: any): Promise<Faq> {

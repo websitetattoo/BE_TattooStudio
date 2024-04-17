@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 @Schema()
 export class Tattoocare extends Document {
   @Prop()
-  title: string[];
+  title: string;
 
   @Prop()
   content: string;

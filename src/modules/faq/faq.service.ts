@@ -8,8 +8,8 @@ import { FaqRepository } from 'src/repositories/faq.repository';
 export class FaqService {
   constructor(private FaqRepository: FaqRepository) {}
 
-  async findAll(): Promise<Faq[]> {
-    return this.FaqRepository.findAll();
+  async findAll(query: any = {}): Promise<{ data: Faq[]; total: number }> {
+    return this.FaqRepository.findAll(query);
   }
 
   async create(data: any): Promise<Faq> {
