@@ -7,6 +7,9 @@ import { OAuth2Client } from 'google-auth-library';
 export class EmailService {
   async sendEmailBooking(data: any, email: string = process.env.MAIL_ACCOUNT) {
     try {
+      console.log('email:', email);
+      console.log('data:', data);
+
       const GOOGLE_MAILER_CLIENT_ID = process.env.GOOGLE_MAILER_CLIENT_ID;
       const GOOGLE_MAILER_CLIENT_SECRET =
         process.env.GOOGLE_MAILER_CLIENT_SECRET;
