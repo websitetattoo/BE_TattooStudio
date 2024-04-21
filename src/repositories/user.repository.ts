@@ -9,21 +9,8 @@ import { User } from 'src/entities/user.entity';
 export class UserRepository {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  async findAll(query: any): Promise<User[]> {
-    const { filter, limit, sort, projection, population } = query;
-
-    const page = filter.page;
-    const offset = (page - 1) * limit;
-    delete filter.page;
-
-    return await this.userModel
-      .find(filter)
-      .skip(offset)
-      .limit(limit)
-      .sort(sort)
-      .select(projection)
-      .populate(population)
-      .exec();
+  async findAll(): Promise<User[]> {
+    return await this.userModel.find().exec();
   }
 
   async create(userData: any): Promise<User> {
