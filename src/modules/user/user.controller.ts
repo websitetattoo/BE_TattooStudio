@@ -22,9 +22,8 @@ export class UserController {
 
   //Ex: http://localhost:5000/user - GET
   @Get()
-  @UsePipes(QueryParserPipe)
-  async getAll(@Query() query?: string): Promise<User[]> {
-    return this.userService.findAll(query);
+  async getAll(): Promise<User[]> {
+    return this.userService.findAll();
   }
 
   //Ex: http://localhost:5000/user - POST
