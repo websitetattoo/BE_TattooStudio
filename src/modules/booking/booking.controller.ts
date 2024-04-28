@@ -42,8 +42,11 @@ export class BookingController {
 
   //Ex: http://localhost:5000/Booking/${id} - GET
   @Get(':id')
-  async getById(@Param('id') id: string): Promise<Booking> {
-    return this.bookingService.findById(id);
+  async getById(
+    @Param('id') id: string,
+    @Query('populate') populate?: string,
+  ): Promise<Booking> {
+    return this.bookingService.findById(id, populate);
   }
 
   //Ex: http://localhost:5000/Booking/${id} - DELETE

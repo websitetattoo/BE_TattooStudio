@@ -61,8 +61,8 @@ export class BookingService {
     }
   }
 
-  async findById(id: string): Promise<Booking> {
-    const Booking = await this.bookingRepository.findById(id);
+  async findById(id: string, populate?: string): Promise<Booking> {
+    const Booking = await this.bookingRepository.findById(id, populate);
     if (!Booking) {
       throw new NotFoundException(`Booking with ID ${id} not found.`);
     }
