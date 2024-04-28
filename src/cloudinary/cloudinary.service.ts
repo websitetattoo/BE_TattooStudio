@@ -43,8 +43,8 @@ export class CloudinaryService {
       // Resize ảnh với chiều rộng tối đa là 800px (cao tự động tính toán theo tỷ lệ)
       image.resize(600, Jimp.AUTO);
 
-      // Nén ảnh với chất lượng JPEG là 60
-      image.quality(60);
+      // Nén ảnh với chất lượng JPEG là 100
+      image.quality(100);
 
       // Chuyển đổi ảnh sang buffer
       const compressedImageBuffer = await image.getBufferAsync(Jimp.MIME_JPEG);

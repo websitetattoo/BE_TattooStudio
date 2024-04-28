@@ -36,8 +36,8 @@ export class BookingRepository {
     return newBooking.save();
   }
 
-  async findById(id: string): Promise<Booking> {
-    return this.bookingModel.findById(id).exec();
+  async findById(id: string, populate?: string): Promise<Booking> {
+    return this.bookingModel.findById(id).populate(populate).exec();
   }
 
   async remove(id: string): Promise<{ status: number; message: string }> {
