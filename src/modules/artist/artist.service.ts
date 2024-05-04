@@ -53,22 +53,27 @@ export class ArtistService {
       if (!oldArtist) {
         throw new Error('Image Artist not found');
       }
-      // Xoá ảnh đại diện trên cloudinary
-      if (oldArtist.avatar) {
-        await this.cloudinaryService.deleteImage(oldArtist.avatar);
+
+      let newData: Artist = { ...data };
+      //Nếu có update ảnh
+      if (files.length > 0) {
+        if (oldArtist.avatar) {
+          // Xoá ảnh đại diện trên cloudinary
+          await this.cloudinaryService.deleteImage(oldArtist.avatar);
+        }
+        //Upload ảnh đại diện
+        const uploadImages = files.map((file: any) => {
+          return this.cloudinaryService.uploadImage(file);
+        });
+        const uploadResult = await Promise.all(uploadImages);
+
+        newData = {
+          ...data,
+          avatar: uploadResult[0]?.secure_url,
+          // images: uploadResult.slice(1).map((image) => image.secure_url),
+        };
       }
 
-      //Ubload ảnh đại diện
-      const uploadImages = files.map((file: any) => {
-        return this.cloudinaryService.uploadImage(file);
-      });
-      const uploadResult = await Promise.all(uploadImages);
-
-      const newData: Artist = {
-        ...data,
-        avatar: uploadResult[0]?.secure_url,
-        images: uploadResult.slice(1).map((image) => image.secure_url),
-      };
       return await this.ArtistRepository.update(id, newData);
     } catch (error) {
       throw error;
@@ -81,9 +86,15 @@ export class ArtistService {
       throw new Error('Image Artist not found');
     }
 
-    // Xoá ảnh trên Cloudinary khi news bị xoá
+    // Xoá ảnh trên Cloudinary khi Artist bị xoá
     if (oldArtist.avatar) {
       await this.cloudinaryService.deleteImage(oldArtist.avatar);
+    }
+    //Xoá các ảnh kèm theo trên Cloudinary
+    if (Array.isArray(oldArtist.images) && oldArtist.images.length > 0) {
+      for (const image of oldArtist.images) {
+        await this.cloudinaryService.deleteImage(image.url);
+      }
     }
     await this.ArtistRepository.remove(id);
   }

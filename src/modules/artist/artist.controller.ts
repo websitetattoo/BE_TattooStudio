@@ -56,7 +56,6 @@ export class ArtistController {
     @UploadedFiles()
     files: {
       avatar?: Express.Multer.File[];
-      images?: Express.Multer.File[];
     },
   ): Promise<Artist> {
     return this.Artistervice.update(id, data, files);
