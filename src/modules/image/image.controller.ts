@@ -1,17 +1,17 @@
 //Libary
-import { Body, Controller, Put, UploadedFiles } from '@nestjs/common';
+import { Body, Controller, Post, UploadedFiles } from '@nestjs/common';
 import { ImagesService } from './image.service';
 
 @Controller('Images')
 export class ImagesController {
   constructor(private ImagesService: ImagesService) {}
 
-  @Put()
+  @Post()
   async updateImagesArtis(
     @Body() data: any,
     @UploadedFiles()
     file: {
-      url?: Express.Multer.File[];
+      image?: Express.Multer.File;
     },
   ): Promise<string> {
     return this.ImagesService.updateImagesArtis(data, file);
