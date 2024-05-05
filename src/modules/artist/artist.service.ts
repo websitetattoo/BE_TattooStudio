@@ -48,15 +48,23 @@ export class ArtistService {
 
   async update(id: string, data: any, files: any): Promise<Artist> {
     try {
+      console.log('data:', data);
+      console.log('files:', files);
       // Truy vấn Artist cũ để lấy đường dẫn ảnh cũ từ db
       const oldArtist = await this.ArtistRepository.findById(id);
       if (!oldArtist) {
         throw new Error('Image Artist not found');
       }
+      const { avatar, images, ...other } = data;
 
-      let newData: Artist = { ...data };
+      //Tạo đối tượng ảnh với id, url
+      const newImages = images.map((item) => ({
+        url: item,
+      }));
+
+      let newData: Artist = { ...other, images: newImages };
       //Nếu có update ảnh
-      if (files.length > 0) {
+      if (!avatar.url) {
         if (oldArtist.avatar) {
           // Xoá ảnh đại diện trên cloudinary
           await this.cloudinaryService.deleteImage(oldArtist.avatar);
@@ -68,9 +76,9 @@ export class ArtistService {
         const uploadResult = await Promise.all(uploadImages);
 
         newData = {
-          ...data,
+          ...other,
           avatar: uploadResult[0]?.secure_url,
-          // images: uploadResult.slice(1).map((image) => image.secure_url),
+          images: newImages,
         };
       }
 
