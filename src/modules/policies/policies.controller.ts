@@ -37,7 +37,7 @@ export class PoliciesController {
   }
 
   //API lưu thông tin chính sách vào db
-  //Ex: http://localhost:3001/policies/create - POST
+  //Ex: http://localhost:3001/policies - POST
   @Post()
   async createPolicy(@Body() data: any): Promise<any> {
     console.log('data:', data);
