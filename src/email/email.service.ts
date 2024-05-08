@@ -122,4 +122,64 @@ export class EmailService {
       throw new Error('Error sending email');
     }
   }
+  // Gửi email tới người dùng quên mật khẩu
+  async sendMailUserResetPassword(
+    email: string,
+    resetToken: string,
+  ): Promise<void> {
+    try {
+      console.log(email);
+      console.log(resetToken);
+      const GOOGLE_MAILER_CLIENT_ID = process.env.GOOGLE_MAILER_CLIENT_ID;
+      const GOOGLE_MAILER_CLIENT_SECRET =
+        process.env.GOOGLE_MAILER_CLIENT_SECRET;
+      const GOOGLE_MAILER_REFRESH_TOKEN =
+        process.env.GOOGLE_MAILER_REFRESH_TOKEN;
+      const ADMIN_EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS;
+
+      // Khởi tạo OAuth2Client với Client ID và Client Secret
+      const myOAuth2Client = new OAuth2Client(
+        GOOGLE_MAILER_CLIENT_ID,
+        GOOGLE_MAILER_CLIENT_SECRET,
+      );
+
+      myOAuth2Client.setCredentials({
+        refresh_token: GOOGLE_MAILER_REFRESH_TOKEN,
+      });
+
+      const myAccessTokenObject = await myOAuth2Client.getAccessToken();
+      const myAccessToken = myAccessTokenObject?.token;
+
+      // Cấu hình email để gửi
+      const transport = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          type: 'OAuth2',
+          user: ADMIN_EMAIL_ADDRESS,
+          clientId: GOOGLE_MAILER_CLIENT_ID,
+          clientSecret: GOOGLE_MAILER_CLIENT_SECRET,
+          refresh_token: GOOGLE_MAILER_REFRESH_TOKEN,
+          accessToken: myAccessToken,
+        },
+      });
+
+      // Nội dung email gửi tới người dùng
+      const resetPasswordLink = `${process.env.PATH_URL_FE}/reset-password/${encodeURIComponent(resetToken)}`;
+      const mailOptions = {
+        to: email,
+        subject: 'Reset Your Password', // Tựa đề email
+        html: `<p>Hello,</p>
+          <p>We received a request to reset your password. Please click the following link to reset your password:</p>
+          <p><a href="${resetPasswordLink}">Reset Password</a></p>
+          <p>If you didn't request a password reset, you can ignore this email.</p>
+          <p>Thank you!</p>`, // Nội dung email
+      };
+
+      // Gửi email
+      await transport.sendMail(mailOptions);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      throw new Error('Error sending email');
+    }
+  }
 }
