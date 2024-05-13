@@ -48,8 +48,6 @@ export class ArtistService {
 
   async update(id: string, data: any, files: any): Promise<Artist> {
     try {
-      console.log('data:', data);
-      console.log('files:', files);
       // Truy vấn Artist cũ để lấy đường dẫn ảnh cũ từ db
       const oldArtist = await this.ArtistRepository.findById(id);
       if (!oldArtist) {
