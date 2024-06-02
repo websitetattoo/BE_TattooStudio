@@ -17,7 +17,6 @@ export class ImagesService {
       const { parentId, id, status } = data;
       let newUrl = '';
       if (status == 0) {
-        //console.log(data);
         // Truy vấn Images cũ để lấy đường dẫn ảnh cũ từ db
         const oldArtist = await this.ArtistRepository.findById(parentId);
         if (!oldArtist) {
@@ -37,7 +36,7 @@ export class ImagesService {
         const uploadResult = await Promise.all(uploadImages);
         newUrl = uploadResult[0]?.secure_url;
       } else {
-        //Ubload lên cloud và trả về url mới
+        //Upload lên cloud và trả về url mới
         const uploadImages = files.map((file: any) => {
           return this.cloudinaryService.uploadImage(file);
         });

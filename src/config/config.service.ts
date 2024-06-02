@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 
-export class ConfigService {
+export class yarConfigService {
   private readonly envConfig: Record<string, string>;
   constructor() {
     const result = dotenv.config();
