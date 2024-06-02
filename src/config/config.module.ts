@@ -1,15 +1,15 @@
 import { Global, Module } from '@nestjs/common';
 
-import { ConfigService } from './config.service';
+import { yarConfigService } from './config.service';
 
 @Global()
 @Module({
   providers: [
     {
-      provide: ConfigService,
-      useValue: new ConfigService(),
+      provide: yarConfigService,
+      useValue: new yarConfigService(),
     },
   ],
-  exports: [ConfigService],
+  exports: [yarConfigService],
 })
 export class ConfigModule {}

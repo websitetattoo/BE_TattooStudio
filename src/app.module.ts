@@ -14,7 +14,7 @@ import { EmailModule } from './email/email.module';
 import BookingModule from './modules/booking/booking.module';
 //Config
 import { ConfigModule } from './config/config.module';
-import { ConfigService } from './config/config.service';
+import { yarConfigService } from './config/config.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
@@ -22,8 +22,8 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     ConfigModule,
     // MongoDB Connection
     MongooseModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
+      inject: [yarConfigService],
+      useFactory: async (configService: yarConfigService) =>
         configService.getMongoConfig(),
     }),
     CategoryModule,
