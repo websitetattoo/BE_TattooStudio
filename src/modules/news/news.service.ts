@@ -20,25 +20,23 @@ export class NewsService {
 
   async create(data: any, file: any): Promise<News> {
     try {
-      console.log(data);
-      console.log(file);
-      // if (!file) {
-      //   // Handle the case where file are undefined
-      //   throw new Error('No file were provided');
-      // }
+      if (!file) {
+        // Handle the case where file are undefined
+        throw new Error('No file were provided');
+      }
 
-      // const uploadImage = file.map((file: any) => {
-      //   return this.cloudinaryService.uploadImage(file);
-      // });
-      // const uploadResult = await Promise.all(uploadImage);
+      const uploadImage = file.map((file: any) => {
+        return this.cloudinaryService.uploadImage(file);
+      });
+      const uploadResult = await Promise.all(uploadImage);
 
-      // const newNews: News = {
-      //   ...data,
-      //   image: uploadResult[0]?.secure_url,
-      // };
-      // const createNews = await this.newsRepository.create(newNews);
+      const newNews: News = {
+        ...data,
+        image: uploadResult[0]?.secure_url,
+      };
+      const createNews = await this.newsRepository.create(newNews);
 
-      // return createNews;
+      return createNews;
       return null;
     } catch (error) {
       throw error;
