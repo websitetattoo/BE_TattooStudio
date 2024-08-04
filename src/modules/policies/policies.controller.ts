@@ -40,7 +40,6 @@ export class PoliciesController {
   //Ex: http://localhost:3001/policies - POST
   @Post()
   async createPolicy(@Body() data: any): Promise<any> {
-    console.log('data:', data);
     return this.policiesService.create(data);
   }
 
